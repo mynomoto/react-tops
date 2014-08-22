@@ -1,30 +1,6 @@
 /** @jsx React.DOM */
 
-var InputWord = React.createClass({
-  handleSubmit: function() {
-    var word = this.refs.word.getDOMNode().value.trim();
-    if (!word) {
-      return false;
-    }
-    this.props.onWordSubmit({word: word});
-    this.refs.word.getDOMNode().value = '';
-    return false;
-  },
-  render: function() {
-    return (
-      <div className="input-group">
-        <input className="form-control" ref="word" type="text"> </input>
-        <span className="input-group-btn">
-          <button className="btn btn-primary" onClick={this.handleSubmit}>
-            Submit
-          </button>
-        </span>
-      </div>
-    );
-  }
-});
-
-var WordView = React.createClass({
+var WordItem = React.createClass({
   render: function() {
     var classString = "list-group-item";
     if ("local" === this.props.origin && !this.props.valid && !this.props.invalid) {
@@ -48,15 +24,39 @@ var WordList = React.createClass({
   render: function() {
     var wordNodes = this.props.data.map(function (word) {
       return (
-        <WordView origin={word.origin} valid={word.valid} invalid={word.invalid}>
+        <WordItem origin={word.origin} valid={word.valid} invalid={word.invalid}>
           {word.word}
-        </WordView>
+        </WordItem>
       );
     });
     return (
       <ul className="list-group">
         {wordNodes}
       </ul>
+    );
+  }
+});
+
+var WordInput = React.createClass({
+  handleSubmit: function() {
+    var word = this.refs.word.getDOMNode().value.trim();
+    if (!word) {
+      return false;
+    }
+    this.props.onWordSubmit({word: word});
+    this.refs.word.getDOMNode().value = '';
+    return false;
+  },
+  render: function() {
+    return (
+      <div className="input-group">
+        <input className="form-control" ref="word" type="text"> </input>
+        <span className="input-group-btn">
+          <button className="btn btn-primary" onClick={this.handleSubmit}>
+            Submit
+          </button>
+        </span>
+      </div>
     );
   }
 });
@@ -121,21 +121,13 @@ var TopsComponent = React.createClass({
       <div className="row">
         <div className="col-lg-4 col-md-5 col-sm-6">
           <h1> React Tops </h1>
-          <InputWord onWordSubmit={this.handleWordSubmit}/>
+          <WordInput onWordSubmit={this.handleWordSubmit}/>
           <WordList data={this.state.data}/>
         </div>
       </div>
     );
   }
 });
-
-var data = [
-  {word: "blabla", origin: "server"},
-  {word: "blibli", origin: "server"},
-  {word: "abcdef", origin: "local"},
-  {word: "abcdef", origin: "local", valid: true},
-  {word: "abcabcabc", origin: "local", invalid: true}
-];
 
 React.renderComponent(
   <TopsComponent url="word" pollInterval={1000} />,
