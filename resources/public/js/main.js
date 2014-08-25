@@ -129,7 +129,9 @@ var TopsComponent = React.createClass({
   }
 });
 
-React.renderComponent(
-  <TopsComponent url="word" pollInterval={1000} />,
-  document.getElementById('tops')
-);
+if (document.getElementById('tops')) {
+  React.renderComponent(
+    <TopsComponent url="word" pollInterval={1000} />,
+    document.getElementById('tops')
+  );
+}

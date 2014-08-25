@@ -149,8 +149,7 @@
 (def app
   (-> routes
       wrap-json-params
-      wrap-json-response
-    ))
+      wrap-json-response))
 
 (defonce server
   (run-jetty #'app {:port 8003 :join? false}))
